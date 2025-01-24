@@ -1,29 +1,35 @@
+// Add hover effect to make the container shift dynamically
+const appContainer = document.getElementById("app");
+
+appContainer.addEventListener("mousemove", (event) => {
+  // Calculate relative mouse position within the container
+  const rect = appContainer.getBoundingClientRect();
+  const mouseX = event.clientX - rect.left; // X position relative to the container
+  const mouseY = event.clientY - rect.top; // Y position relative to the container
+
+  // Normalize the mouse position to range -1 to 1
+  const offsetX = (mouseX / rect.width - 0.5) * 2; // Horizontal shift
+  const offsetY = (mouseY / rect.height - 0.5) * 2; // Vertical shift
+
+  // Apply a slight movement based on mouse position
+  appContainer.style.transform = `translate(${offsetX * -20}px, ${
+    offsetY * -20
+  }px)`;
+});
+
+appContainer.addEventListener("mouseleave", () => {
+  // Reset the position when the mouse leaves the container
+  appContainer.style.transform = "translate(0, 0)";
+});
+
+// Existing functionality for the save button
 document.getElementById("saveButton").addEventListener("click", () => {
   const imageInput = document.getElementById("imageInput");
-  const stringInput1 = document.getElementById("stringInput1").value;
-  const stringInput2 = document.getElementById("stringInput2").value;
+  const stringInput1 = document.getElementById("stringInput1").value.trim();
+  const stringInput2 = document.getElementById("stringInput2").value.trim();
 
-  // Read the uploaded image file as Base64
-  const reader = new FileReader();
-  reader.onload = function () {
-    const imageBase64 = reader.result;
-
-    // Generate the data package
-    const outputData = {
-      type: "UnityDataPackage",
-      payload: {
-        image: imageBase64, // Base64-encoded image
-        settings: {
-          string1: stringInput1, // Customization string 1
-          string2: stringInput2, // Customization string 2
-        },
-      },
-    };
-
-    // Calculate size of the data package
+  const displayOutput = (outputData) => {
     const packageSize = new Blob([JSON.stringify(outputData)]).size;
-
-    // Display the data and its size in the output section
     document.getElementById("output").textContent = JSON.stringify(
       outputData,
       null,
@@ -35,31 +41,33 @@ document.getElementById("saveButton").addEventListener("click", () => {
   };
 
   if (imageInput.files.length > 0) {
+    const reader = new FileReader();
+    reader.onload = function () {
+      const imageBase64 = reader.result;
+      const outputData = {
+        type: "UnityDataPackage",
+        payload: {
+          image: imageBase64,
+          settings: {
+            string1: stringInput1 || null,
+            string2: stringInput2 || null,
+          },
+        },
+      };
+      displayOutput(outputData);
+    };
     reader.readAsDataURL(imageInput.files[0]);
   } else {
-    // If no image is uploaded, display other fields only
     const outputData = {
       type: "UnityDataPackage",
       payload: {
-        image: null, // No image
+        image: null,
         settings: {
-          string1: stringInput1,
-          string2: stringInput2,
+          string1: stringInput1 || null,
+          string2: stringInput2 || null,
         },
       },
     };
-
-    // Calculate size of the data package
-    const packageSize = new Blob([JSON.stringify(outputData)]).size;
-
-    // Display the data and its size in the output section
-    document.getElementById("output").textContent = JSON.stringify(
-      outputData,
-      null,
-      2
-    );
-    document.getElementById(
-      "size"
-    ).textContent = `Package Size: ${packageSize} bytes`;
+    displayOutput(outputData);
   }
 });

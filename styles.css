@@ -20,6 +20,14 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border: 1px solid #e0e0e0;
   text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, width 0.3s ease;
+}
+
+/* Add hover effects to make the menu grow and shift slightly */
+#app:hover {
+  transform: scale(1.05) translate(10px, -5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  max-width: 520px; /* Grows slightly */
 }
 
 /* Header Styles */
@@ -65,11 +73,12 @@ button {
   border-radius: 5px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 button:hover {
   background-color: #0056b3;
+  transform: translateY(-3px); /* Shift button upwards slightly */
 }
 
 /* Output Section */
