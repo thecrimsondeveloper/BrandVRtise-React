@@ -25,9 +25,9 @@ body {
 
 /* Add hover effects to make the menu grow and shift slightly */
 #app:hover {
-  transform: scale(1.05) translate(10px, -5px);
+  /* transform: scale(1.05) translate(10px, -5px); */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  max-width: 520px; /* Grows slightly */
+  /* max-width: 520px; Grows slightly */
 }
 
 /* Header Styles */
